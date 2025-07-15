@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot320">
+
+  <xacro:include filename="../mech/mycobot320_base.urdf.xacro"/>
+  <xacro:include filename="../mech/mycobot320_arm.urdf.xacro"/>
+  <xacro:include filename="../mech/mycobot320_gripper.urdf.xacro"/>
+
+</robot>

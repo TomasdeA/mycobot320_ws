@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot320">
+
+  <link name="base">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/base.dae"/>
+      </geometry>
+      <origin xyz="0.0 0 0" rpy="0 0 1.5708"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.102" radius="0.0725"/>
+        <!--<mesh filename="package://mycobot320_description/meshes/mycobot320/visual/base.dae"/>-->
+      </geometry>
+      <origin xyz="0.0 0 0" rpy="0 0 1.5708"/>
+    </collision>
+  </link>
+
+</robot>
