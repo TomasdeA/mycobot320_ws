@@ -28,9 +28,9 @@
         name="link1"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link1.dae"
         origin="0.0 0.0 -0.078"
-        rpy="0 0 1.5708"
+        rpy="0 0 ${pi/2}"
         collision_origin="0.0 0.0 -0.0235"
-        collision_rpy="0 0 1.5708"
+        collision_rpy="0 0 ${pi/2}"
         length="0.12375"
         radius="0.04"/>
     <!--All length, radius and collion pose had been graphically obtained.-->
@@ -38,9 +38,9 @@
         name="link2"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link2.dae"
         origin="0.0 0.0 -0.04"
-        rpy="0 1.5708 0"
+        rpy="0 ${pi/2} 0"
         collision_origin="0.065 0.0 0.0005"
-        collision_rpy="0 1.5708 0"
+        collision_rpy="0 ${pi/2} 0"
         length="0.2"
         radius="0.0315"/>
 
@@ -48,9 +48,9 @@
         name="link3"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link3.dae"
         origin="0.0 0.0 0.039"
-        rpy="1.5708 1.5708 1.5708"
+        rpy="${pi/2} ${pi/2} ${pi/2}"
         collision_origin="0.06 0.0 -0.005"
-        collision_rpy="1.5708 1.5708 1.5708"
+        collision_rpy="${pi/2} ${pi/2} ${pi/2}"
         length="0.175"
         radius="0.03"/>
 
@@ -58,9 +58,9 @@
         name="link4"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link4.dae"
         origin="0.0 -0.0024 -0.05"
-        rpy="1.5708 1.5708 0"
+        rpy="${pi/2} ${pi/2} 0"
         collision_origin="0.0 -0.0234 -0.0"
-        collision_rpy="1.5708 1.5708 0"
+        collision_rpy="${pi/2} ${pi/2} 0"
         length="0.095"
         radius="0.029"/>
 
@@ -68,9 +68,9 @@
         name="link5"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link5.dae"
         origin="0.0 0.0 -0.05"
-        rpy="0 0 -1.5708"
+        rpy="0 0 -${pi/2}"
         collision_origin="0.0 -0.008 0"
-        collision_rpy="0 1.5708 -1.5708"
+        collision_rpy="0 ${pi/2} -${pi/2}"
         length="0.08"
         radius="0.029"/>
 
@@ -78,7 +78,7 @@
         name="link6"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link6.dae"
         origin="0.0 0.0 -0.022"
-        rpy="1.5708 1.5708 0"
+        rpy="${pi/2} ${pi/2} 0"
         collision_origin="0.0 0.0 -0.0125"
         collision_rpy="0 0 0"
         length="0.015"
@@ -109,7 +109,7 @@
         parent="link1" 
         child="link2" 
         origin="0 -0.086 0" 
-        rpy="0 -1.5708 1.5708" 
+        rpy="0 -${pi/2} ${pi/2}" 
         axis="0 0 1" 
         lower="-2.3561" 
         upper="2.3561"/>
@@ -129,7 +129,7 @@
         parent="link3" 
         child="link4" 
         origin="0.1195 0 0.082" 
-        rpy="0 0 1.57080" 
+        rpy="0 0 ${pi/2}0" 
         axis="0 0 1" 
         lower="-2.5830" 
         upper="2.5830"/>
@@ -139,7 +139,7 @@
         parent="link4" 
         child="link5" 
         origin="0 -0.09415 0.0" 
-        rpy="1.5708 0 0" 
+        rpy="${pi/2} 0 0" 
         axis="0 0 1" 
         lower="-2.9321" 
         upper="2.9321"/>
@@ -149,7 +149,7 @@
         parent="link5" 
         child="link6" 
         origin="0 0.055 0.0" 
-        rpy="-1.5708 0 0" 
+        rpy="-${pi/2} 0 0" 
         axis="0 0 1" 
         lower="-3.14159" 
         upper="3.14159"/>

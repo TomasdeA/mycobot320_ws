@@ -7,14 +7,14 @@
                 <!--- 0.0 0 -0.04 -->
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_base.dae"/>
             </geometry>
-            <origin xyz = "-0.02 0.012 -0.018 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "-0.02 0.012 -0.018 " rpy = " 0 0 ${pi/2}"/>
         </visual>
         <collision>
             <geometry>
                 <!--- 0.0 0 -0.04 -->
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_base.dae"/>
             </geometry>
-            <origin xyz = "-0.02 0.012 -0.018 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "-0.02 0.012 -0.018 " rpy = " 0 0 ${pi/2}"/>
         </collision>
     </link>
 
@@ -24,13 +24,13 @@
                 <!--- 0.0 0 -0.04 -->
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_left1.dae"/>
             </geometry>
-            <origin xyz = "0.036 -0.052 0.0 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "0.036 -0.052 0.0 " rpy = " 0 0 ${pi/2}"/>
         </visual>
         <collision>
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_left1.dae"/>
             </geometry>
-            <origin xyz = "0.036 -0.052 0.0 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "0.036 -0.052 0.0 " rpy = " 0 0 ${pi/2}"/>
         </collision>
     </link>
 
@@ -39,13 +39,13 @@
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_left2.dae"/>
             </geometry>
-            <origin xyz = "0.03 0.024 -0.018 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "0.03 0.024 -0.018 " rpy = " 0 0 ${pi/2}"/>
         </visual>
         <collision>
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_left2.dae"/>
             </geometry>
-            <origin xyz = "0.03 0.024 -0.018 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "0.03 0.024 -0.018 " rpy = " 0 0 ${pi/2}"/>
         </collision>
     </link>
 
@@ -54,7 +54,7 @@
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_left3.dae"/>
             </geometry>
-            <origin xyz = "0.034 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+            <origin xyz = "0.034 0.0 -0.012 " rpy = " 0 3.14159 -${pi/2}"/>
             <!-- <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/> -->
 
         </visual>
@@ -62,7 +62,7 @@
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_left3.dae"/>
             </geometry>
-            <origin xyz = "0.034 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+            <origin xyz = "0.034 0.0 -0.012 " rpy = " 0 3.14159 -${pi/2}"/>
         </collision>
     </link>
 
@@ -72,13 +72,13 @@
                 <!--- 0.0 0 -0.04 -->
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_right1.dae"/>
             </geometry>
-            <origin xyz = "-0.072 -0.05 0.0 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "-0.072 -0.05 0.0 " rpy = " 0 0 ${pi/2}"/>
         </visual>
         <collision>
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_right1.dae"/>
             </geometry>
-            <origin xyz = "-0.072 -0.05 0.0 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "-0.072 -0.05 0.0 " rpy = " 0 0 ${pi/2}"/>
         </collision>
     </link>
 
@@ -87,13 +87,13 @@
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_right2.dae"/>
             </geometry>
-            <origin xyz = "-0.066 0.023 -0.018 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "-0.066 0.023 -0.018 " rpy = " 0 0 ${pi/2}"/>
         </visual>
         <collision>
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_right2.dae"/>
             </geometry>
-            <origin xyz = "-0.066 0.023 -0.018 " rpy = " 0 0 1.5708"/>
+            <origin xyz = "-0.066 0.023 -0.018 " rpy = " 0 0 ${pi/2}"/>
         </collision>
     </link>
 
@@ -102,14 +102,14 @@
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_right3.dae"/>
             </geometry>
-            <origin xyz = "0 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+            <origin xyz = "0 0.0 -0.012 " rpy = " 0 3.14159 -${pi/2}"/>
 
         </visual>
         <collision>
             <geometry>
                 <mesh filename="package://mycobot320_description/meshes/mycobot320/visual/gripper_right3.dae"/>
             </geometry>
-        <origin xyz = "0.0 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+        <origin xyz = "0.0 0.0 -0.012 " rpy = " 0 3.14159 -${pi/2}"/>
         </collision>
     </link>
 
@@ -118,7 +118,7 @@
         <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/> -->
         <parent link="link6"/>
         <child link="gripper_base"/>
-        <origin xyz= "0 0.0 0.042" rpy = "1.5708 0 0"/>
+        <origin xyz= "0 0.0 0.042" rpy = "${pi/2} 0 0"/>
     </joint>
 
     <joint name="gripper_controller" type="revolute">
