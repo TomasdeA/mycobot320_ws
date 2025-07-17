@@ -1,8 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot320">
 
-  <xacro:include filename="../mech/mycobot320_base.urdf.xacro"/>
-  <xacro:include filename="../mech/mycobot320_arm.urdf.xacro"/>
-  <xacro:include filename="../mech/mycobot320_gripper.urdf.xacro"/>
+    <xacro:include filename="$(find mycobot320_description)/urdf/mech/mycobot320_base.urdf.xacro"/>
+    <xacro:include filename="$(find mycobot320_description)/urdf/mech/mycobot320_arm.urdf.xacro"/>
+    <!--<xacro:include filename="$(find mycobot320_description)/urdf/mech/mycobot320_gripper.urdf.xacro"/>-->
+
+    <!-- Define the base link for moveit, gazebo, ros2_control, etc...-->
+    <link name="base_link"/>
+    <joint name="base_link_to_base" type="fixed">
+        <parent link="base_link"/>
+        <child link="base"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
 
 </robot>
