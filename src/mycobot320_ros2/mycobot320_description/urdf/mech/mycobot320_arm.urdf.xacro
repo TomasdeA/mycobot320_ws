@@ -28,7 +28,7 @@
         name="link1"
         mesh="package://mycobot320_description/meshes/mycobot320/visual/link1.dae"
         origin="0.0 0.0 -0.078"
-        rpy="0 0 ${pi/2}"
+        rpy="0 0 -${pi/2}"
         collision_origin="0.0 0.0 -0.0235"
         collision_rpy="0 0 ${pi/2}"
         length="0.12375"
@@ -99,7 +99,7 @@
         parent="base" 
         child="link1" 
         origin="0 0 0.173" 
-        rpy="0 0 0" 
+        rpy="0 0 ${pi}" 
         axis="0 0 1" 
         lower="-2.9321" 
         upper="2.9321"/>
@@ -108,8 +108,8 @@
         name="joint2" 
         parent="link1" 
         child="link2" 
-        origin="0 -0.086 0" 
-        rpy="0 -${pi/2} ${pi/2}" 
+        origin="0 0.086 0" 
+        rpy="0 -${pi/2} ${-pi/2}" 
         axis="0 0 1" 
         lower="-2.3561" 
         upper="2.3561"/>
