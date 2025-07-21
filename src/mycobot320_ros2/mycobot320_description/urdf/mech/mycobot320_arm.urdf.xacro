@@ -90,7 +90,8 @@
             <child link="${child}"/>
             <origin xyz="${origin}" rpy="${rpy}"/>
             <axis xyz="${axis}"/>
-            <limit lower="${lower}" upper="${upper}" effort="999.0" velocity="0"/>
+            <!--<limit lower="${lower}" upper="${upper}" effort="999.0" velocity="0"/>-->
+            <limit lower="-${pi}" upper="${pi}" effort="999.0" velocity="0"/>
         </joint>
     </xacro:macro>
 
