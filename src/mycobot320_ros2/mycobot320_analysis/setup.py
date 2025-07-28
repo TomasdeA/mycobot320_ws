@@ -33,6 +33,9 @@ setup(
     entry_points={
         'console_scripts': [
             'show_configurations = mycobot320_analysis.nodes.show_configurations:main',
+            'analyze_singularity_shoulder = mycobot320_analysis.nodes.analyze_singularity_shoulder:main',
+            'analyze_singularity_elbow = mycobot320_analysis.nodes.analyze_singularity_elbow:main',
+            'analyze_singularity_wrist = mycobot320_analysis.nodes.analyze_singularity_wrist:main',
         ],
     },
 )

@@ -6,6 +6,8 @@ from roboticstoolbox.tools.trajectory import ctraj, jtraj
 import matplotlib.pyplot as plt
 import spatialmath as sm
 
+SE3 = sm.SE3  # Alias for SE3 from spatialmath
+
 class MyCobot320(DHRobot):
 
     def __init__(self, symbolic=False, *args, **kwargs):
@@ -128,7 +130,7 @@ class MyCobot320(DHRobot):
         status=1
 
         return q,status
-    
+
 
     def joint_move(self, q_start, q_goal, steps=50):
         """
@@ -143,6 +145,73 @@ class MyCobot320(DHRobot):
         - q_path: ndarray(steps, 6), interpolated trajectory
         """
         return jtraj(q_start, q_goal, steps).q
+        
+    def cartesian_move(self, pose_start, pose_end, steps=50):
+        """
+        Generate a Cartesian trajectory between two poses.
+
+        Parameters:
+        - pose_start: spatialmath.SE3 initial pose
+        - pose_end: spatialmath.SE3 final pose
+        - steps: number of interpolation steps
+
+        Returns:
+        - list of SE3 poses interpolated using ctraj()
+        """
+        return ctraj(pose_start, pose_end, steps)
+    
+    def get_jacobian(self, q):
+        """
+        Returns the geometric Jacobian at joint configuration q
+        """
+        return self.jacob0(q)
+
+    def nullspace(self, J):
+        """
+        Computes the null space of a Jacobian matrix J
+        """
+        return sc.linalg.null_space(J)
+    
+    def trajectory_along_nullspace(self, q_start, steps=100, step_size=0.01, normalize_by=0):
+        """
+        Generate a joint-space trajectory along the Jacobian's null space.
+
+        Parameters:
+        - q_start: ndarray(6,) initial configuration (ideally singular)
+        - steps: int, number of steps
+        - step_size: float, step size in joint space
+        - normalize_by: int, preferred joint index for direction normalization
+
+        Returns:
+        - traj: ndarray(N, 6), the joint trajectory
+        - is_internal: bool, True if singularity is internal, False if external
+        """
+        q_current = q_start.copy()
+        trajectory = []
+
+        for i in range(steps):
+            J = self.get_jacobian(q_current)
+            null = self.nullspace(J)
+
+            if null.shape[1] == 0:
+                return np.array(trajectory), False  # External singularity
+
+            direction = null[:, 0]
+
+            if np.abs(direction[normalize_by]) < 1e-6:
+                nonzero_indices = np.where(np.abs(direction) > 1e-6)[0]
+                if len(nonzero_indices) == 0:
+                    return np.array(trajectory), False  # Degenerate singularity
+                normalize_by = nonzero_indices[0]
+
+            direction = -direction / direction[normalize_by]
+            q_next = q_current + step_size * direction
+            segment = jtraj(q_current, q_next, 2).q
+            trajectory.append(segment[1])
+            q_current = q_next
+
+        return np.array(trajectory), True  # Internal singularity
+
 
     def plot_reach(self, pose):
         """ 
@@ -260,3 +329,4 @@ class MyCobot320(DHRobot):
 
         return pose_aux
 
+__all__ = ['MyCobot320', 'SE3']
