@@ -3,9 +3,9 @@
 <package format="3">
   <name>mycobot320_analysis</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Tools to analyze the kinematics and singularities of the myCobot320 robot using symbolic and numeric methods</description>
   <maintainer email="tdeaguirre@fi.uba.ar">tomasdea</maintainer>
-  <license>TODO: License declaration</license>
+  <license>BSD-3-Clause</license>
 
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
@@ -13,6 +13,10 @@
 
   <exec_depend>xacro</exec_depend>
   <exec_depend>mycobot320_description</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
+  <exec_depend>python3-sympy</exec_depend>
+  <exec_depend>python3-matplotlib</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
