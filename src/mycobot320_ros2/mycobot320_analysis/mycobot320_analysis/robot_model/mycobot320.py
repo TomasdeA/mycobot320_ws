@@ -180,37 +180,44 @@ class MyCobot320(DHRobot):
         - q_start: ndarray(6,) initial configuration (ideally singular)
         - steps: int, number of steps
         - step_size: float, step size in joint space
-        - normalize_by: int, preferred joint index for direction normalization
+        - normalize_by: int, joint index used to normalize the nullspace direction
 
         Returns:
-        - traj: ndarray(N, 6), the joint trajectory
-        - is_internal: bool, True if singularity is internal, False if external
+        - traj: ndarray(steps, 6), the joint-space trajectory
+        - is_internal: bool, True if nullspace persists through all steps (internal singularity), False if it vanishes (external)
         """
         q_current = q_start.copy()
         trajectory = []
+        is_internal = True
+        direction = None  # store the last valid nullspace direction
 
-        for i in range(steps):
+        for _ in range(steps):
             J = self.get_jacobian(q_current)
             null = self.nullspace(J)
 
-            if null.shape[1] == 0:
-                return np.array(trajectory), False  # External singularity
+            if null.shape[1] > 0:
+                direction = null[:, 0]
 
-            direction = null[:, 0]
+                if abs(direction[normalize_by]) < 1e-6:
+                    nonzero_indices = np.where(np.abs(direction) > 1e-6)[0]
+                    if len(nonzero_indices) == 0:
+                        is_internal = False
+                        break
+                    normalize_by = nonzero_indices[0]
 
-            if np.abs(direction[normalize_by]) < 1e-6:
-                nonzero_indices = np.where(np.abs(direction) > 1e-6)[0]
-                if len(nonzero_indices) == 0:
-                    return np.array(trajectory), False  # Degenerate singularity
-                normalize_by = nonzero_indices[0]
+                direction = -direction / direction[normalize_by]
+            else:
+                is_internal = False
+                if direction is None:
+                    break  # cannot proceed if no valid direction was ever found
 
-            direction = -direction / direction[normalize_by]
             q_next = q_current + step_size * direction
             segment = jtraj(q_current, q_next, 2).q
             trajectory.append(segment[1])
             q_current = q_next
 
-        return np.array(trajectory), True  # Internal singularity
+        traj_array = np.array(trajectory)
+        return traj_array, is_internal
 
 
     def plot_reach(self, pose):
