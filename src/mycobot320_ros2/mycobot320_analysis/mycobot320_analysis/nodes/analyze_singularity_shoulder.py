@@ -53,7 +53,7 @@ class ShoulderSingularityAnalyzer(Node):
         if is_internal:
             self.get_logger().info("Trajectory completed. Singularity is INTERNAL.")
         else:
-            self.get_logger().warn("Jacobian recovered full rank early. Singularity is EXTERNAL or degenerate.")
+            self.get_logger().info("Jacobian recovered full rank early. Singularity is EXTERNAL or degenerate.")
         
         if self.traj.size == 0:
             self.get_logger().warn("Jacobian has full rank at this configuration. No null-space motion possible.")
