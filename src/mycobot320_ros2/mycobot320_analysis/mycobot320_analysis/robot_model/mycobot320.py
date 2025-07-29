@@ -214,18 +214,18 @@ class MyCobot320(DHRobot):
 
 
     def plot_reach(self, pose):
-        """ 
-        Grafica el alcance del robot myCobot320 en 3D, mostrando la posición de los eslabones 
-        y el alcance mínimo y máximo.
+        """
+        Plots the reach of the myCobot320 robot in 3D, showing the position of the links
+        and the minimum and maximum reach.
         """
         pose_aux = self._get_pose_matrix(pose)
 
-        # Extraigo las componentes de la matriz que van a ser usadas en las ecuaciones
+        # Extract the components of the matrix used in the equations
         px, py, pz = pose_aux.t
-        nx, ny, nz = pose_aux.R[:, 0]   
+        nx, ny, nz = pose_aux.R[:, 0]
         sx, sy, sz = pose_aux.R[:, 1]
-        ax, ay, az = pose_aux.R[:, 2]   
-        
+        ax, ay, az = pose_aux.R[:, 2]
+
         # Extract link lengths from DH table used in calculations
         d1 = self.links[0].d 
         a2 = self.links[1].a
@@ -234,23 +234,23 @@ class MyCobot320(DHRobot):
         d5 = self.links[4].d 
         d6 = self.links[5].d 
 
-        # Calculo el alcance minimo y maximo
+        # Calculate minimum and maximum reach
         r_min = abs(a2 - a3)
         r_max = a2 + a3
 
-        posiciones = [np.array([0, 0, 0])]
-    
-        for i in range(7):
-            posiciones.append(pose.A[i][:3, 3])  # Posición X, Y, Z
+        positions = [np.array([0, 0, 0])]
 
-        pos=np.array(posiciones).T
+        for i in range(7):
+            positions.append(pose.A[i][:3, 3])  # X, Y, Z position
+
+        pos = np.array(positions).T
         fig = plt.figure()
         ax3d = fig.add_subplot(111, projection='3d')
 
-        # Posición inicial
-        ax3d.plot(pos[0], pos[1], pos[2], 'o-', color='red', label='Posición')
+        # Initial position
+        ax3d.plot(pos[0], pos[1], pos[2], 'o-', color='red', label='Position')
 
-        # Uno los puntos intermedios para visualizar los eslabones
+        # Connect intermediate points to visualize the links
         for i in range(len(pos[0]) - 1):
             ax3d.plot(
                 [pos[0, i], pos[0, i + 1]],
@@ -258,14 +258,14 @@ class MyCobot320(DHRobot):
                 [pos[2, i], pos[2, i + 1]],
                 'r--'
             )
-        muñeca = np.array([px - ax * d6,
-                py - ay * d6,
-                pz - az * d6])
+        wrist = np.array([px - ax * d6,
+                          py - ay * d6,
+                          pz - az * d6])
         theta = np.linspace(0, 2 * np.pi, 100)
         x_circ = d4 * np.cos(theta)
         y_circ = d4 * np.sin(theta)
-        centro_z = muñeca[2] 
-        z_circ = np.full_like(theta, centro_z)
+        center_z = wrist[2]
+        z_circ = np.full_like(theta, center_z)
 
         x_max = r_max * np.cos(theta)
         y_max = r_max * np.sin(theta)
@@ -273,23 +273,22 @@ class MyCobot320(DHRobot):
         x_min = r_min * np.cos(theta)
         y_min = r_min * np.sin(theta)
 
-
         ax3d.plot(x_circ, y_circ, z_circ,
-                color='blue',
-                linestyle='--',
-                linewidth=2,
-                label='Límite de alcance (discriminante)')
-        ax3d.plot(x_max, y_max, d1, 'b--', label="Alcance Máximo")
-        ax3d.plot(x_min, y_min, d1,  'r--', label="Alcance Mínimo")
+                  color='blue',
+                  linestyle='--',
+                  linewidth=2,
+                  label='Reach limit (discriminant)')
+        ax3d.plot(x_max, y_max, d1, 'b--', label="Maximum Reach")
+        ax3d.plot(x_min, y_min, d1,  'r--', label="Minimum Reach")
 
-        # Configuración del gráfico
+        # Plot configuration
         ax3d.set_xlim([-0.300, 0.300])
         ax3d.set_ylim([-0.300, 0.300])
         ax3d.set_zlim([0.000, 0.400])
         ax3d.set_xlabel('X (mm)')
         ax3d.set_ylabel('Y (mm)')
         ax3d.set_zlabel('Z (mm)')
-        plt.title('myCobot320: Posición de los Eslabones')
+        plt.title('myCobot320: Link Positions')
         plt.legend()
         plt.grid(True)
         plt.show()

@@ -12,7 +12,7 @@ class ShowConfigurationsNode(Node):
         self.robot = MyCobot320()
         self.joint_names = [f'joint{i+1}' for i in range(6)]
 
-        # Pose de referencia alcanzable por las 8 configuraciones
+        # Reference pose reachable by all 8 configurations
         self.q_base = np.array([-1.5, 0.662, -1.036, -2.293, -0.323, -0.119])
         self.pose_list = self.robot.fkine_all(self.q_base)
         self.pose = self.pose_list[-1]
@@ -34,14 +34,14 @@ class ShowConfigurationsNode(Node):
         self.get_logger().info("ShowConfigurationsNode started.")
 
     def timer_callback(self):
-        # 1) Esperar a que se publique suficiente tiempo el último q alcanzado
+        # Wait until the last reached q is published enough times
         if self.traj_goal_reached:
             if self.repeat_counter < self.repeat_limit:
                 self.publish_joint_state(self.last_q)
                 self.repeat_counter += 1
                 return
 
-            # 2) Ya terminamos de repetir la pose, pasamos al siguiente config
+            # Done repeating the pose, move to the next configuration
             if self.index >= len(self.configs):
                 self.get_logger().info("Finished all 8 configurations.")
                 rclpy.shutdown()
@@ -58,9 +58,9 @@ class ShowConfigurationsNode(Node):
                 self.traj_index = 0
                 self.traj_path = q_path
 
-                self.get_logger().info(f"conf_deseada={config} | conf_resultante={config_calc}")
+                self.get_logger().info(f"desired_config={config} | resulting_config={config_calc}")
             else:
-                self.get_logger().warn(f"conf_deseada={config} → No alcanzable")
+                self.get_logger().warn(f"desired_config={config} → Not reachable")
 
             self.repeat_counter = 0
             self.index += 1
@@ -78,8 +78,8 @@ class ShowConfigurationsNode(Node):
             self.publish_joint_state(q)
             self.traj_index += 1
         elif len(self.traj_path) > 0:
-            self.last_q = self.traj_path[-1]  # Actualiza el último q alcanzado
-            self.traj_path = []               # Limpia trayectoria para evitar repeticiones
+            self.last_q = self.traj_path[-1]  # Update the last reached q
+            self.traj_path = []               # Clear trajectory to avoid repetitions
             self.traj_goal_reached = True
 
 def main(args=None):
