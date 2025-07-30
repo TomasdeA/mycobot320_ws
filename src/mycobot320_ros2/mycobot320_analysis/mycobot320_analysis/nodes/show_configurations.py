@@ -3,6 +3,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import JointState
 import numpy as np
 import itertools
+import sys
 from mycobot320_analysis.robot_model.mycobot320 import MyCobot320
 
 class ShowConfigurationsNode(Node):
@@ -13,7 +14,9 @@ class ShowConfigurationsNode(Node):
         self.joint_names = [f'joint{i+1}' for i in range(6)]
 
         # Reference pose reachable by all 8 configurations
-        self.q_base = np.array([-1.5, 0.662, -1.036, -2.293, -0.323, -0.119])
+        #self.q_base = np.array([1.614,  2.089,  -1.78,  -1.443,  0.017, -0.866])  # to many collisions, but "reachable" by all 8 configurations
+        #self.q_base = np.array([ 0.1,  0.8, -1.2, -1.0, -0.4, 0.2]) # example with unreachable configurations
+        self.q_base = np.array([1, -0.934, 2.496, -2.564, 0, 0]) # to many collisions, but "reachable" by all 8 configurations
         self.pose_list = self.robot.fkine_all(self.q_base)
         self.pose = self.pose_list[-1]
 
@@ -82,11 +85,17 @@ class ShowConfigurationsNode(Node):
             self.traj_path = []               # Clear trajectory to avoid repetitions
             self.traj_goal_reached = True
 
+    def end(self):
+        self.get_logger().info("ShowConfigurationsNode shutting down.")
+        self.timer.cancel()
+        self.destroy_node() 
+        sys.exit(0)       
+
 def main(args=None):
     rclpy.init(args=args)
     node = ShowConfigurationsNode()
     rclpy.spin(node)
-    node.destroy_node()
+    node.end()
     rclpy.shutdown()
 
 if __name__ == '__main__':

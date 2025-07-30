@@ -47,11 +47,42 @@ These are not resolvable via `rosdep` as they come from `PyPI` (e.g. roboticstoo
 
 ## Launch commands
 
+### URDF slider check
+
+```bash
+ros2 launch mycobot320_description display_.launch.py
+```
+
 ### Configurations
 
 In order to see 1 pose reached with the 8 configurations run:
 ```bash
 ros2 launch mycobot320_analysis show_configurations.launch.py
+```
+
+### Singularities
+
+#### Shoulder
+```bash
+ros2 launch mycobot320_analysis analyze_singularity_shoulder.launch.py
+```
+
+#### Elbow
+```bash
+ros2 launch mycobot320_analysis analyze_singularity_elbow.launch.py
+```
+
+#### Wrist
+```bash
+ros2 launch mycobot320_analysis analyze_singularity_wrist.launch.py
+```
+
+### CLI menu
+
+Ir order to have a complete analysis and understanding of the MyCobot320.py
+
+```bash
+./run_analysis_menu.py 
 ```
 
 ## License

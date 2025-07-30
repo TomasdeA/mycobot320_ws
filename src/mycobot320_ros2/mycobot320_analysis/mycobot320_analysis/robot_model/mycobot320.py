@@ -1,20 +1,15 @@
 import numpy as np
 import scipy as sc
-from sympy import symbols, Matrix, pprint
 from roboticstoolbox import DHRobot, RevoluteDH
 from roboticstoolbox.tools.trajectory import ctraj, jtraj
-import matplotlib.pyplot as plt
 import spatialmath as sm
 
 SE3 = sm.SE3  # Alias for SE3 from spatialmath
 
 class MyCobot320(DHRobot):
 
-    def __init__(self, symbolic=False, *args, **kwargs):
-        if symbolic:
-            d1, a2, a3, d4, d5, d6 = symbols('d1 a2 a3 d4 d5 d6')
-        else:
-            d1, a2, a3, d4, d5, d6 = 0.1739, 0.135, 0.120, 0.08878, 0.095, 0.0655
+    def __init__(self, *args, **kwargs):
+        d1, a2, a3, d4, d5, d6 = 0.1739, 0.135, 0.120, 0.08878, 0.095, 0.0655
 
         ejes = [
             RevoluteDH(alpha=-np.pi/2, a=0,    d=d1, offset=0,         qlim=[-170*np.pi/180,170*np.pi/180]),
@@ -25,7 +20,7 @@ class MyCobot320(DHRobot):
             RevoluteDH(alpha=0,       a=0,    d=d6, offset=0,         qlim=[-180*np.pi/180,180*np.pi/180]),
         ]
 
-        super().__init__(*args, ejes, name='myCobot320', gravity=[0, 0, -9.8], symbolic=symbolic, **kwargs)
+        super().__init__(*args, ejes, name='myCobot320', gravity=[0, 0, -9.8], **kwargs)
 
     def calculate_config(self, q):
         if q.ndim == 1:
@@ -131,7 +126,6 @@ class MyCobot320(DHRobot):
 
         return q,status
 
-
     def joint_move(self, q_start, q_goal, steps=50):
         """
         Generate a joint-space trajectory from q_start to q_goal.
@@ -218,103 +212,6 @@ class MyCobot320(DHRobot):
 
         traj_array = np.array(trajectory)
         return traj_array, is_internal
-
-
-    def plot_reach(self, pose):
-        """
-        Plots the reach of the myCobot320 robot in 3D, showing the position of the links
-        and the minimum and maximum reach.
-        """
-        pose_aux = self._get_pose_matrix(pose)
-
-        # Extract the components of the matrix used in the equations
-        px, py, pz = pose_aux.t
-        nx, ny, nz = pose_aux.R[:, 0]
-        sx, sy, sz = pose_aux.R[:, 1]
-        ax, ay, az = pose_aux.R[:, 2]
-
-        # Extract link lengths from DH table used in calculations
-        d1 = self.links[0].d 
-        a2 = self.links[1].a
-        a3 = self.links[2].a
-        d4 = self.links[3].d 
-        d5 = self.links[4].d 
-        d6 = self.links[5].d 
-
-        # Calculate minimum and maximum reach
-        r_min = abs(a2 - a3)
-        r_max = a2 + a3
-
-        positions = [np.array([0, 0, 0])]
-
-        for i in range(7):
-            positions.append(pose.A[i][:3, 3])  # X, Y, Z position
-
-        pos = np.array(positions).T
-        fig = plt.figure()
-        ax3d = fig.add_subplot(111, projection='3d')
-
-        # Initial position
-        ax3d.plot(pos[0], pos[1], pos[2], 'o-', color='red', label='Position')
-
-        # Connect intermediate points to visualize the links
-        for i in range(len(pos[0]) - 1):
-            ax3d.plot(
-                [pos[0, i], pos[0, i + 1]],
-                [pos[1, i], pos[1, i + 1]],
-                [pos[2, i], pos[2, i + 1]],
-                'r--'
-            )
-        wrist = np.array([px - ax * d6,
-                          py - ay * d6,
-                          pz - az * d6])
-        theta = np.linspace(0, 2 * np.pi, 100)
-        x_circ = d4 * np.cos(theta)
-        y_circ = d4 * np.sin(theta)
-        center_z = wrist[2]
-        z_circ = np.full_like(theta, center_z)
-
-        x_max = r_max * np.cos(theta)
-        y_max = r_max * np.sin(theta)
-
-        x_min = r_min * np.cos(theta)
-        y_min = r_min * np.sin(theta)
-
-        ax3d.plot(x_circ, y_circ, z_circ,
-                  color='blue',
-                  linestyle='--',
-                  linewidth=2,
-                  label='Reach limit (discriminant)')
-        ax3d.plot(x_max, y_max, d1, 'b--', label="Maximum Reach")
-        ax3d.plot(x_min, y_min, d1,  'r--', label="Minimum Reach")
-
-        # Plot configuration
-        ax3d.set_xlim([-0.300, 0.300])
-        ax3d.set_ylim([-0.300, 0.300])
-        ax3d.set_zlim([0.000, 0.400])
-        ax3d.set_xlabel('X (mm)')
-        ax3d.set_ylabel('Y (mm)')
-        ax3d.set_zlabel('Z (mm)')
-        plt.title('myCobot320: Link Positions')
-        plt.legend()
-        plt.grid(True)
-        plt.show()
-
-    def plot_conf(self, q, conf, output_path=None, mostrar=False):
-        a = self.plot(q, backend='pyplot', jointaxes=False, block=False, name=False)
-        fig = a.fig
-        ax = fig.gca()
-        ax.view_init(elev=41, azim=-37)
-        ax.set_xlim([-0.05, 0.20])
-        ax.set_ylim([-0.05, 0.10])
-        ax.set_zlim([0.00, 0.30])
-        ax.set_box_aspect([1, 1, 0.5]) 
-        a.hold()
-        if output_path:
-            fig.savefig(output_path)
-        if mostrar:
-            plt.show()
-        return fig
 
     def validate_pdcpci(self):
         q = np.random.randn(6)
