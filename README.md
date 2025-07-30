@@ -12,7 +12,7 @@
 
 This ROS 2 package provides symbolic and numeric tools to analyze the kinematics and singularities 
 of the myCobot320 robot. It combines the flexibility of the Python Robotics Toolbox with ROS 2 tools 
-like RViz, joint state publishing, and MoveIt-based collision validation.
+like RViz, joint state publishing, and int the future MoveIt-based collision validation.
 
 ---
 
