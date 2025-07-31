@@ -1,4 +1,4 @@
-# mycobot320_ros2
+# MyCobot320 with ROS2
 
 ![OS](https://img.shields.io/ubuntu/v/ubuntu-wallpapers/jammy?logo=ubuntu)
 
@@ -10,9 +10,7 @@
 
 ---
 
-This ROS 2 package provides symbolic and numeric tools to analyze the kinematics and singularities 
-of the myCobot320 robot. It combines the flexibility of the Python Robotics Toolbox with ROS 2 tools 
-like RViz, joint state publishing, and int the future MoveIt-based collision validation.
+This ROS 2 package provides symbolic and numeric tools to analyze the kinematics and singularities of the myCobot320 robot. It combines the flexibility of the Python Robotics Toolbox with ROS 2 tools like RViz with joint state publishing.
 
 ---
 
@@ -39,28 +37,33 @@ rosdep install -i --from-path src --rosdistro $ROS_DISTRO -y
 ```
 `rosdep` scans the `.xml` files to determine which dependencies need to be installed from apt.
 
-### 2. Install PyPi requirements
+### 2. Install Python requirements
 ```bash
 pip install -r requirements.txt
 ```
-These are not resolvable via `rosdep` as they come from `PyPI` (e.g. roboticstoolbox-python).
+These dependencies come from PyPI (e.g., roboticstoolbox-python) are not resolvable via rosdep.
 
+## 3. Build the Workspace 
+```bash
+cd ~/mycobot320_ws 
+colcon build 
+source ~/mycobot320_ws/install/setup.bash
+```
 ## Launch commands
 
-### URDF slider check
+### URDF Visualization with Sliders
 
 ```bash
-ros2 launch mycobot320_description display_.launch.py
+ros2 launch mycobot320_description display.launch.py
 ```
 
-### Configurations
+### Show All 8 Configurations for a Single Pose
 
-In order to see 1 pose reached with the 8 configurations run:
 ```bash
 ros2 launch mycobot320_analysis show_configurations.launch.py
 ```
 
-### Singularities
+### Singularity Analysis
 
 #### Shoulder
 ```bash
@@ -77,9 +80,9 @@ ros2 launch mycobot320_analysis analyze_singularity_elbow.launch.py
 ros2 launch mycobot320_analysis analyze_singularity_wrist.launch.py
 ```
 
-### CLI menu
+### CLI Menu (Optional)
 
-Ir order to have a complete analysis and understanding of the MyCobot320.py
+To perform a complete analysis from an interactive menu:
 
 ```bash
 ./run_analysis_menu.py 
@@ -92,4 +95,5 @@ This project is licensed under the BSD-3-Clause License.
 ## Maintainer
 
 Tomás de Aguirre
+
 tomas.a.de.aguirre@gmail.com
