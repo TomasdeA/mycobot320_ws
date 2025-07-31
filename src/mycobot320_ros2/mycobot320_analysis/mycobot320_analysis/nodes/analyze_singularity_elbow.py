@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
 import numpy as np
+import sys
 from mycobot320_analysis.robot_model.mycobot320 import MyCobot320, SE3
 
 class ElbowSingularityAnalyzer(Node):
@@ -48,25 +49,32 @@ class ElbowSingularityAnalyzer(Node):
         q_around = self.q_sing + np.array([0, 0, 0.05, 0, 0, 0])
         conf = self.robot.calculate_config(q_around)
 
+        # Extract DH parameters used in inverse kinematics
+        d1 = self.robot.links[0].d
+        a2 = self.robot.links[1].a
+        a3 = self.robot.links[2].a
+        d4 = self.robot.links[3].d
+        d5 = self.robot.links[4].d
+        d6 = self.robot.links[5].d
         # Define two SE3 poses for the Cartesian path
-        TA = SE3([[0, -1, 0, 0.25],
-                  [-1, 0, 0, self.robot.links[3].d],
-                  [0, 0, -1, 0.09774],
+        TA = SE3([[0, -1, 0, a2 + a3 + d5],
+                  [-1, 0, 0, d4],
+                  [0, 0, -1, d1-d6],
                   [0, 0, 0, 1]])
-        TB = SE3([[0, -1, 0, 0.36],
-                  [-1, 0, 0, self.robot.links[3].d],
-                  [0, 0, -1, 0.09774],
+        TB = SE3([[0, -1, 0, a2 + a3 + d5 - 0.1],
+                  [-1, 0, 0, d4],
+                  [0, 0, -1, d1-d6],
                   [0, 0, 0, 1]])
 
         # Fixed rotation for the end-effector orientation
-        R_fixed = np.array([[0, -0.9988, -0.04998],
-                            [-1, 0, 0],
-                            [0, 0.04998, -0.9988]])
+        #R_fixed = np.array([[0, -0.9998, -0.04998],
+        #                    [-1, 0, 0],
+        #                    [0, 0.04998, -0.9998]])
 
         joint_traj = []
         # Solve IK for each Cartesian pose to build the joint trajectory
-        for pose in self.robot.cartesian_move(TA, TB, 100):
-            pose.A[:3, :3] = R_fixed
+        for pose in self.robot.cartesian_move(TA, TB, 20):
+            #pose.A[:3, :3] = R_fixed
             q_sol, status = self.robot.ikine_a(pose, conf)
             if status == 1:
                 joint_traj.append(q_sol)
@@ -96,7 +104,7 @@ class ElbowSingularityAnalyzer(Node):
             if self.generate_cartesian_trajectory():
                 self.phase = 'cartesian'
             else:
-                rclpy.shutdown()
+                self.end()
 
         # Publish the Cartesian trajectory
         elif self.traj_index < len(self.traj):
@@ -106,21 +114,27 @@ class ElbowSingularityAnalyzer(Node):
         # End the program when all trajectories are done
         else:
             self.get_logger().info("Cartesian trajectory complete.")
-            rclpy.shutdown()
+            self.end()
 
     def publish_joint_state(self, q):
         msg = JointState()
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.name = self.joint_names
         msg.position = q.tolist()
-        self.publisher.publish(msg)        
+        self.publisher.publish(msg)
+
+    def end(self):
+        self.get_logger().info("ElbowSingularityAnalyzer node shutting down.")
+        self.timer.cancel()
+        self.destroy_node() 
+        sys.exit(0)       
 
 def main(args=None):
     rclpy.init(args=args)
     node = ElbowSingularityAnalyzer()
     rclpy.spin(node)
-    node.destroy_node()
+    node.end()
     rclpy.shutdown()
-
+    
 if __name__ == '__main__':
     main()

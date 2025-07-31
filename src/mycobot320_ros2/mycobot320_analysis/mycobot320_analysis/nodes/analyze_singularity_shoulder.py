@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
 import numpy as np
+import sys
 from mycobot320_analysis.robot_model.mycobot320 import MyCobot320, SE3
 
 class ShoulderSingularityAnalyzer(Node):
@@ -31,7 +32,7 @@ class ShoulderSingularityAnalyzer(Node):
 
         if status != 1:
             self.get_logger().error("Failed to compute IK at shoulder singularity.")
-            rclpy.shutdown()
+            rclpy.end()
             return
 
         self.q_sing = q_sing
@@ -102,13 +103,13 @@ class ShoulderSingularityAnalyzer(Node):
         # When null-space motion ends, switch to Cartesian trajectory
         elif hasattr(self, 'phase') and self.phase == 'cartesian':
             self.get_logger().info("Cartesian trajectory complete.")
-            rclpy.shutdown()
+            rclpy.end()
         else:
             self.get_logger().info("Null-space trajectory complete. Starting Cartesian trajectory.")
             if self.generate_cartesian_trajectory():
                 self.phase = 'cartesian'
             else:
-                rclpy.shutdown()
+                rclpy.end()
 
     def publish_joint_state(self, q):
         msg = JointState()
@@ -117,11 +118,18 @@ class ShoulderSingularityAnalyzer(Node):
         msg.position = q.tolist()
         self.publisher.publish(msg)
 
+    def end(self):
+        self.get_logger().info("ShoulderSingularityAnalyzer node shutting down.")
+        self.timer.cancel()
+        self.destroy_node() 
+        sys.exit(0)       
+
+
 def main(args=None):
     rclpy.init(args=args)
     node = ShoulderSingularityAnalyzer()
     rclpy.spin(node)
-    node.destroy_node()
+    node.end()
     rclpy.shutdown()
 
 if __name__ == '__main__':

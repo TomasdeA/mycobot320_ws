@@ -14,9 +14,13 @@ class ShowConfigurationsNode(Node):
         self.joint_names = [f'joint{i+1}' for i in range(6)]
 
         # Reference pose reachable by all 8 configurations
+
         #self.q_base = np.array([1.614,  2.089,  -1.78,  -1.443,  0.017, -0.866])  # to many collisions, but "reachable" by all 8 configurations
         #self.q_base = np.array([ 0.1,  0.8, -1.2, -1.0, -0.4, 0.2]) # example with unreachable configurations
-        self.q_base = np.array([1, -0.934, 2.496, -2.564, 0, 0]) # to many collisions, but "reachable" by all 8 configurations
+        #self.q_base = np.array([1, -0.934, 2.496, -2.564, 0, 0]) # to many collisions, but "reachable" by all 8 configurations
+        #self.q_base = np.array([0, -0.02359878, 1, 1.52359878, 0.5, 0]) # the best one yet
+        self.q_base = np.array([0, 0.5, 1., 1.52359878, -0.02359878, 0])
+        
         self.pose_list = self.robot.fkine_all(self.q_base)
         self.pose = self.pose_list[-1]
 
@@ -47,7 +51,7 @@ class ShowConfigurationsNode(Node):
             # Done repeating the pose, move to the next configuration
             if self.index >= len(self.configs):
                 self.get_logger().info("Finished all 8 configurations.")
-                rclpy.shutdown()
+                rclpy.end()
                 return
 
             config = list(self.configs[self.index])
